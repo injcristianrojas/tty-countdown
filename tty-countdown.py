@@ -4,20 +4,53 @@ import subprocess
 import argparse
 import time
 import os
+import re
+from datetime import datetime, timedelta
 
 # Default dimensions just in case
 DEFAULT_HEIGHT = 24
 DEFAULT_WIDTH = 80
 
+# Parameter validation functions
+
+
+def hhmm_type(s: str) -> str:
+    _TIME_RE = re.compile(r"^(?P<hour>[0-9]{2}):(?P<min>[0-9]{2})$")
+    m = _TIME_RE.match(s)
+    if not m:
+        raise argparse.ArgumentTypeError(f"invalid time: '{s}' (expected format HH:MM)")
+
+    h = int(m.group("hour"))
+    mnt = int(m.group("min"))
+
+    if h < 0 or h > 23:
+        raise argparse.ArgumentTypeError(
+            f"hour out of range: {h:02d} (expected 00..23)"
+        )
+    if mnt < 0 or mnt > 59:
+        raise argparse.ArgumentTypeError(
+            f"minute out of range: {mnt:02d} (expected 00..59)"
+        )
+
+    # return normalized zero-padded string (keeps exact HH:MM shape)
+    return f"{h:02d}:{mnt:02d}"
+
+
+def timeTargetToSeconds(timetarget):
+    if re.match(r"^\d{2}:\d{2}$", timetarget):
+        hour, minute = map(int, timetarget.split(":"))
+        today = datetime.now()
+        end_time = today.replace(hour=hour, minute=minute, second=0)
+        if end_time <= today:
+            end_time += timedelta(days=1)
+    else:
+        end_time = datetime.strptime(timetarget, "%Y-%m-%d %H:%M:%S")
+    return (end_time - datetime.now()).total_seconds()
+
+
 # Arguments
 parser = argparse.ArgumentParser(description="Fancy countdown script")
 
-parser.add_argument(
-    "-m", "--minutes", action="store", type=int, help="Number of minutes", default=0
-)
-parser.add_argument(
-    "-s", "--seconds", action="store", type=int, help="Number of seconds", default=0
-)
 parser.add_argument(
     "-f",
     "--font",
@@ -29,14 +62,16 @@ parser.add_argument(
     "-n", "--nocenter", action="store_true", help="Do not center timer (more efficient)"
 )
 
+parser.add_argument(
+    "timetarget", help="Time target. Must be in HH:MM format.", type=hhmm_type
+)
+
 args = parser.parse_args()
 
 centered = not args.nocenter
-seconds = args.seconds
-minutes = args.minutes
 fontFile = args.font
-
-seconds = minutes * 60 + seconds
+timetarget = args.timetarget
+seconds = timeTargetToSeconds(timetarget)
 
 
 # Turn string into blocky ascii representation
