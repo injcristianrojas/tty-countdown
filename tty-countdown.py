@@ -3,6 +3,7 @@
 import subprocess
 import argparse
 import time
+import os
 
 # Default dimensions just in case
 DEFAULT_HEIGHT = 24
@@ -11,17 +12,22 @@ DEFAULT_WIDTH = 80
 # Arguments
 parser = argparse.ArgumentParser(description="Fancy countdown script")
 
-parser.add_argument("-m", "--minutes", action="store",
-                    type=int, help="Number of minutes",
-                    default=0)
-parser.add_argument("-s", "--seconds", action="store",
-                    type=int, help="Number of seconds",
-                    default=0)
-parser.add_argument("-f", "--font", action="store",
-                    help="Custom font file",
-                    default="/usr/share/tty-countdown/font.txt")
-parser.add_argument("-n", "--nocenter", action="store_true",
-                    help="Do not center timer (more efficient)")
+parser.add_argument(
+    "-m", "--minutes", action="store", type=int, help="Number of minutes", default=0
+)
+parser.add_argument(
+    "-s", "--seconds", action="store", type=int, help="Number of seconds", default=0
+)
+parser.add_argument(
+    "-f",
+    "--font",
+    action="store",
+    help="Custom font file",
+    default=os.path.join(os.getcwd(), "font.txt"),
+)
+parser.add_argument(
+    "-n", "--nocenter", action="store_true", help="Do not center timer (more efficient)"
+)
 
 args = parser.parse_args()
 
@@ -80,13 +86,13 @@ def clear():
 # Terminal dimensions [height, width]
 def getTermDimensions():
     try:
-        dimensions = subprocess.check_output(['stty', 'size']).split()
+        dimensions = subprocess.check_output(["stty", "size"]).split()
         return list(map(int, dimensions))
     except subprocess.CalledProcessError:
         return [DEFAULT_HEIGHT, DEFAULT_WIDTH]
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     # Load font file
     with open(fontFile, "r") as f:
         font = f.read().split("\n<---->\n")
