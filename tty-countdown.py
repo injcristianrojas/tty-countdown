@@ -11,9 +11,8 @@ from datetime import datetime, timedelta
 DEFAULT_HEIGHT = 24
 DEFAULT_WIDTH = 80
 
+
 # Parameter validation functions
-
-
 def hhmm_type(s: str) -> str:
     _TIME_RE = re.compile(r"^(?P<hour>[0-9]{2}):(?P<min>[0-9]{2})$")
     m = _TIME_RE.match(s)
