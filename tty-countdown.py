@@ -133,6 +133,25 @@ def getTermDimensions():
         return [DEFAULT_HEIGHT, DEFAULT_WIDTH]
 
 
+def get_times(end_time):
+    now = datetime.now()
+    now = now.replace(microsecond=0)
+    current_time = now.strftime("%H:%M:%S")
+    time_left = end_time - now
+    # print("{} - {}".format(now, time_left))
+    if time_left.total_seconds() <= 0:
+        remaining_time = "00:00:00"
+    else:
+        total_hours = time_left.total_seconds() / 3600
+        hours = int(total_hours)
+        minutes = int((total_hours - hours) * 60)
+        seconds = int(((total_hours - hours) * 60 - minutes) * 60)
+        if seconds >= 60:
+            seconds = 0
+        remaining_time = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
+    return current_time, remaining_time
+
+
 def exit():
     sys.exit(0)
 
@@ -146,10 +165,7 @@ if __name__ == "__main__":
     # Countdown
     while seconds >= 0:
         try:
-            m, s = divmod(seconds, 60)
-            h, m = divmod(m, 60)
-            t1 = "00:00:00"
-            t2 = "%02d:%02d:%02d" % (h, m, s)
+            t1, t2 = get_times(datetime.now() + timedelta(seconds=seconds))
             print(center(asciiFormat(t1, t2, font), getTermDimensions()), end="")
             seconds -= 1
             time.sleep(1)
