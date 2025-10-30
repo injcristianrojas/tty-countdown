@@ -180,7 +180,7 @@ if __name__ == "__main__":
     seconds -= 1
 
     # Countdown
-    while seconds >= 0:
+    while seconds > -1:
         try:
             t1, t2 = get_times(datetime.now() + timedelta(seconds=seconds))
             print(center(asciiFormat(t1, t2, font), getTermDimensions()), end="")
