@@ -56,7 +56,7 @@ parser.add_argument(
     "--font",
     action="store",
     help="Custom font file",
-    default=os.path.join(os.getcwd(), "font.txt"),
+    default=os.path.join(os.path.dirname(os.path.realpath(__file__)), "font.txt"),
 )
 parser.add_argument(
     "-n", "--nocenter", action="store_true", help="Do not center timer (more efficient)"
