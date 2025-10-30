@@ -152,6 +152,20 @@ def get_times(end_time):
     return current_time, remaining_time
 
 
+def wait_until_next_second():
+    now = time.time()
+    next_second = int(now) + 1
+    sleep_time = next_second - now
+    print(
+        "Syncing... waiting {0:.2f} seconds until the next second in time... ".format(
+            sleep_time
+        ),
+        end="",
+    )
+    time.sleep(sleep_time)
+    print("Launching timer.")
+
+
 def exit():
     sys.exit(0)
 
@@ -161,6 +175,9 @@ if __name__ == "__main__":
     with open(fontFile, "r") as f:
         font = f.read().split("\n<---->\n")
         font = [symbol.split("\n") for symbol in font]
+
+    wait_until_next_second()
+    seconds -= 1
 
     # Countdown
     while seconds >= 0:
