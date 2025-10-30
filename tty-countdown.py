@@ -5,6 +5,7 @@ import argparse
 import time
 import os
 import re
+import sys
 from datetime import datetime, timedelta
 
 # Default dimensions just in case
@@ -126,6 +127,10 @@ def getTermDimensions():
         return [DEFAULT_HEIGHT, DEFAULT_WIDTH]
 
 
+def exit():
+    sys.exit(0)
+
+
 if __name__ == "__main__":
     # Load font file
     with open(fontFile, "r") as f:
@@ -134,9 +139,12 @@ if __name__ == "__main__":
 
     # Countdown
     while seconds >= 0:
-        m, s = divmod(seconds, 60)
-        h, m = divmod(m, 60)
-        t = "%02d:%02d:%02d" % (h, m, s)
-        print(center(asciiFormat(t, font), getTermDimensions()), end="")
-        seconds -= 1
-        time.sleep(1)
+        try:
+            m, s = divmod(seconds, 60)
+            h, m = divmod(m, 60)
+            t = "%02d:%02d:%02d" % (h, m, s)
+            print(center(asciiFormat(t, font), getTermDimensions()), end="")
+            seconds -= 1
+            time.sleep(1)
+        except KeyboardInterrupt:
+            exit()
