@@ -76,19 +76,25 @@ seconds = timeTargetToSeconds(timetarget)
 
 # Turn string into blocky ascii representation
 # Supports 0-9, colon
-def asciiFormat(string, font):
+def asciiFormat(string1, string2, font):
     # enumerate numbers and colons
-    string = list(map(int, [c.replace(":", "10") for c in list(string)]))
+    string1 = list(map(int, [c.replace(":", "10") for c in list(string1)]))
+    string2 = list(map(int, [c.replace(":", "10") for c in list(string2)]))
     height = len(font[0])
 
     frame = ""
     # fill frame top to bottom
     for i in range(height):
-        for char in string[:-1]:
+        for char in string1[:-1]:
             frame += font[char][i] + " "
-        # dirty hack to have no space at the end
-        frame += font[string[-1]][i]
-
+        frame += font[string1[-1]][i]
+        frame += "\n"
+    for i in range(2):
+        frame += "\n"
+    for i in range(height):
+        for char in string2[:-1]:
+            frame += font[char][i] + " "
+        frame += font[string2[-1]][i]
         frame += "\n"
     return frame[:-1]
 
@@ -142,8 +148,9 @@ if __name__ == "__main__":
         try:
             m, s = divmod(seconds, 60)
             h, m = divmod(m, 60)
-            t = "%02d:%02d:%02d" % (h, m, s)
-            print(center(asciiFormat(t, font), getTermDimensions()), end="")
+            t1 = "00:00:00"
+            t2 = "%02d:%02d:%02d" % (h, m, s)
+            print(center(asciiFormat(t1, t2, font), getTermDimensions()), end="")
             seconds -= 1
             time.sleep(1)
         except KeyboardInterrupt:
