@@ -100,7 +100,7 @@ if __name__ == "__main__":
 
     # Countdown
     while seconds >= 0:
-        t = "%s:%02d" % divmod(seconds, 60)
+        t = "%02d:%02d" % divmod(seconds, 60)
         print(center(asciiFormat(t, font), getTermDimensions()), end="")
         seconds -= 1
         time.sleep(1)
