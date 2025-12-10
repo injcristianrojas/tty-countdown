@@ -8,7 +8,7 @@ A TTY countdown timer.
 ## Usage
 
 ```shell
-usage: tty-countdown.py [-h] [-f FONT] [-n] timetarget
+usage: tty-countdown.py timetarget
 
 Fancy countdown script
 
