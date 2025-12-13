@@ -1,6 +1,6 @@
 # TTY-Countdown II
 
-![screenshot](screenshot.png)
+![screenshot](screen.gif)
 
 A TTY countdown timer. Works on Python 3.8 or higher.
 
