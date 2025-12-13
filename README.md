@@ -8,7 +8,7 @@ A TTY countdown timer. Works on Python 3.8 or higher.
 ## Usage
 
 ```shell
-usage: tty-countdown.py timetarget
+usage: tty-countdown.py [-h] timetarget
 
 Fancy countdown script
 
