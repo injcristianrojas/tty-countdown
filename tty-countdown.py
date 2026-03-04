@@ -7,6 +7,7 @@ import sys
 import shutil
 from datetime import datetime, timedelta
 from glyphs import numbers
+from functions.countdown import get_times
 
 font = numbers.font
 
@@ -87,47 +88,14 @@ def center(frame):
     return frame
 
 
-def get_times(seconds):
-    now = datetime.now().replace(microsecond=500000)
-    end_time = now + timedelta(seconds=seconds)
-    current_time = now.strftime("%H:%M:%S")
-    time_left = end_time - now
-    if time_left.total_seconds() <= 0:
-        remaining_time = "00:00:00"
-    else:
-        total_hours = time_left.total_seconds() / 3600
-        hours = int(total_hours)
-        minutes = int((total_hours - hours) * 60)
-        seconds = int(((total_hours - hours) * 60 - minutes) * 60)
-        if seconds >= 60:
-            seconds = 0
-        remaining_time = f"{hours:02d}:{minutes:02d}:{seconds:02d}"
-    return current_time, remaining_time
-
-
-def wait_until_next_second():
-    now = time.time()
-    next_second = int(now) + 1
-    sleep_time = next_second - now
-    print(
-        "Syncing... waiting {0:.2f} seconds until the next second in time... ".format(
-            sleep_time
-        ),
-        end="",
-    )
-    time.sleep(sleep_time)
-    print("Launching timer.")
-
-
 def exit():
     sys.exit(0)
 
 
 if __name__ == "__main__":
-    wait_until_next_second()
     while True:
         try:
-            t1, t2 = get_times(seconds)
+            t1, t2 = get_times(timetarget_string)
             print(center(asciiFormat(t1, t2)), end="")
             seconds -= 1
             time.sleep(1)
