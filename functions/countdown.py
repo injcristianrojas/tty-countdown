@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 
 def get_times(end_time: str):
-    now = datetime.now().replace(microsecond=0)  # ← fix: align to whole second
+    now = datetime.now().replace(microsecond=0)
 
     end_hour, end_minute = map(int, end_time.split(":"))
     end_dt = now.replace(hour=end_hour, minute=end_minute, second=0)
