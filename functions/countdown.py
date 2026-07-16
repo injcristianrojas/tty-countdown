@@ -20,4 +20,6 @@ def get_times(end_time: str):
         f"{hours:02}:{minutes:02}:{seconds:02}" if total_seconds > 0 else "00:00:00"
     )
 
-    return now.strftime("%H:%M:%S"), remainder_string
+    is_it_over = total_seconds <= 0
+
+    return now.strftime("%H:%M:%S"), remainder_string, is_it_over

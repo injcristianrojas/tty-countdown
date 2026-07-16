@@ -43,6 +43,7 @@ parser = argparse.ArgumentParser(description="Fancy countdown script")
 parser.add_argument(
     "timetarget", help="Time target. Must be in HH:MM format.", type=hhmm_type
 )
+parser.add_argument("-x", "--exit", action="store_true", help="Exit on countdown end")
 
 args = parser.parse_args()
 timetarget = args.timetarget
@@ -95,8 +96,13 @@ def exit():
 if __name__ == "__main__":
     while True:
         try:
-            t1, t2 = get_times(timetarget_string)
+            t1, t2, is_it_over = get_times(timetarget_string)
             print(center(asciiFormat(t1, t2)), end="")
+            if is_it_over is True:
+                if args.exit:
+                    print("\033[H\033[2J", end="")
+                    print(f"Countdown is over at {timetarget_string}. Closing.")
+                    exit()
             seconds -= 1
             time.sleep(1)
         except KeyboardInterrupt:
